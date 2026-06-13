@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
     <title>Universal YouTube Premium Formats Experience | Starvel Studios</title>
     
     <meta name="description" content="Explore cinematic aspects and simulation layers of any YouTube video presentation. Switch formats seamlessly between IMAX, Dolby Vision, and Large Format.">
@@ -39,26 +38,24 @@
             overflow-x: hidden;
         }
 
-        /* Ambient Dynamic Background Layer */
         #bgFallback {
             position: fixed;
             top: 0;
             left: 0;
             width: 100vw;
             height: 100vh;
-            background: radial-gradient(circle at center, #111 0%, #030303 100%);
+            background: radial-gradient(circle at center, #141414 0%, #030303 100%);
             z-index: -1; 
             opacity: 0.6;
         }
 
-        /* GLOBAL SMOOTH PAGE TRANSITIONS */
+        /* Smooth Page Transitions */
         .navbar, .title-container, .input-panel, .player-container, .info-section, .support-container, .designer-credit {
             opacity: 0;
             transform: scale(0.97) translateY(25px);
             animation: fluidWaterIn 1.4s var(--water-transition) forwards;
         }
 
-        /* Staggered Load Pipelines */
         .navbar { animation-delay: 0.05s; }
         .title-container { animation-delay: 0.1s; }
         .input-panel { animation-delay: 0.15s; }
@@ -74,7 +71,7 @@
             }
         }
 
-        /* Liquid Glass Navigation Bar */
+        /* Glass Navbar */
         .navbar {
             width: 100vw;
             background: rgba(10, 10, 10, 0.4);
@@ -90,18 +87,6 @@
             top: 0;
             z-index: 100;
             margin-bottom: 2rem;
-        }
-
-        .nav-logo-container {
-            display: flex;
-            align-items: center;
-        }
-
-        .nav-logo {
-            height: 42px;
-            width: auto;
-            object-fit: contain;
-            filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.5));
         }
 
         .nav-view-counter {
@@ -120,7 +105,7 @@
             margin-left: 4px;
         }
 
-        /* YouTube Link Input Panel Block */
+        /* URL Input Section */
         .input-panel {
             width: 100%;
             max-width: 1000px;
@@ -171,7 +156,6 @@
             box-shadow: 0 8px 20px rgba(229, 193, 88, 0.3);
         }
 
-        /* Header Layout Styling */
         .title-container {
             margin-bottom: 1rem;
             max-width: 550px; 
@@ -188,13 +172,12 @@
         }
         .title-container h2 span { color: #e5c158; }
 
-        /* Core Master Video Suite Container */
+        /* Core Video Viewport */
         .player-container {
             width: 100%;
             max-width: 1000px; 
             display: flex;
             flex-direction: column;
-            background-color: transparent; 
             margin: 0 auto 3rem auto;
         }
 
@@ -204,15 +187,12 @@
             justify-content: center;
             align-items: center;
             margin-bottom: 2rem;
-            flex-grow: 1;
-            min-height: 0; 
         }
 
         .video-wrapper {
             position: relative; 
             aspect-ratio: var(--current-ratio) / 1;
             width: 100%;
-            max-height: 100%;
             background-color: #000;
             border-radius: 20px;
             border: var(--glass-border);
@@ -224,30 +204,23 @@
             transition: aspect-ratio 0.85s cubic-bezier(0.25, 1, 0.2, 1);
         }
 
-        /* YouTube API Frame Wrapper Pipeline */
         .yt-frame-container {
             width: 100%;
             height: 100%;
-            pointer-events: auto;
-            will-change: transform, filter;
-            transform: scale(1.01); /* Crops native master player layout edges slightly */
+            transform: scale(1.01); /* Smooth bezel edge cropping */
             transition: filter var(--water-duration) var(--water-transition), transform var(--water-duration) var(--water-transition); 
         }
 
-        .yt-frame-container iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
+        .yt-frame-container iframe { width: 100%; height: 100%; border: none; }
 
         .vfx-blur-active .yt-frame-container {
             filter: blur(5px) contrast(1.05);
             transform: scale(1.03);
         }
 
-        /* Dolby Dynamic Vision LUT Multipliers */
+        /* Dolby Vision Color Correction Simulation Hardware Node */
         .dolby-grade .yt-frame-container {
-            filter: contrast(1.18) saturate(1.22) brightness(1.04) drop-shadow(0 0 30px rgba(255,255,255,0.05));
+            filter: contrast(1.18) saturate(1.25) brightness(1.03) drop-shadow(0 0 30px rgba(255,255,255,0.05));
         }
 
         .format-overlay {
@@ -256,7 +229,6 @@
             left: 25px;
             z-index: 10;
             pointer-events: none; 
-            transition: all var(--water-duration) var(--water-transition);
             display: none;
             color: #fff;
             background: rgba(0,0,0,0.6);
@@ -269,7 +241,7 @@
             backdrop-filter: blur(5px);
         }
         
-        /* Fluid Glass Buttons Framework */
+        /* Control Interface Grid */
         .controls { 
             display: flex; 
             gap: 12px; 
@@ -301,11 +273,6 @@
             overflow: hidden;
         }
 
-        .format-btn.premium-logo-btn {
-            justify-content: center;
-            gap: 4px;
-        }
-
         .format-btn::before {
             content: '';
             position: absolute;
@@ -315,40 +282,18 @@
             border-radius: 50%;
             transform: translate(-50%, -50%);
             transition: width 0.75s var(--water-transition), height 0.75s var(--water-transition);
-            pointer-events: none;
         }
         
-        .format-btn:hover::before, .format-btn.active::before { 
-            width: 200px; height: 200px; 
-        }
-        
-        .format-btn:hover { 
-            color: #fff; 
-            background: var(--glass-bg-hover);
-            border: var(--glass-shine);
-            transform: translateY(-4px) scale(1.03);
-        }
-        
-        .format-btn.active { 
-            background: rgba(255, 255, 255, 0.14);
-            color: #fff; 
-            border: var(--glass-shine);
-            border-color: #e5c158;
-            box-shadow: 0 12px 30px rgba(212, 175, 55, 0.2);
-            transform: translateY(-6px) scale(1.05);
-        }
+        .format-btn:hover::before, .format-btn.active::before { width: 200px; height: 200px; }
+        .format-btn:hover { color: #fff; background: var(--glass-bg-hover); border: var(--glass-shine); transform: translateY(-4px) scale(1.03); }
+        .format-btn.active { background: rgba(255, 255, 255, 0.14); color: #fff; border: var(--glass-shine); border-color: #e5c158; box-shadow: 0 12px 30px rgba(212, 175, 55, 0.2); transform: translateY(-6px) scale(1.05); }
 
         .format-btn > * { z-index: 2; position: relative; }
         .format-title { font-weight: 700; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.5px; }
         .format-ratio { font-size: 0.7rem; opacity: 0.65; font-weight: 500; }
         .screen-icon { margin-bottom: auto; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.9rem; color: #e5c158;}
 
-        .divider {
-            width: 1px;
-            height: 50px;
-            background-color: rgba(255, 255, 255, 0.15);
-            margin: 0 8px;
-        }
+        .divider { width: 1px; height: 50px; background-color: rgba(255, 255, 255, 0.15); margin: 0 8px; }
 
         .fullscreen-btn {
             background: var(--glass-bg);
@@ -368,77 +313,37 @@
             gap: 8px;
             transition: all var(--water-duration) var(--water-transition);
         }
-        .fullscreen-btn:hover {
-            color: #fff;
-            background: var(--glass-bg-hover);
-            border: var(--glass-shine);
-            transform: translateY(-4px) scale(1.03);
-        }
+        .fullscreen-btn:hover { color: #fff; background: var(--glass-bg-hover); border: var(--glass-shine); transform: translateY(-4px) scale(1.03); }
         .fullscreen-btn svg { width: 22px; height: 22px; fill: currentColor; }
         
-        /* Info Section Layout */
+        /* Supporting Copy Layouts */
         .info-section { 
-            width: 100%; 
-            max-width: 1000px; 
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: var(--glass-border);
-            border-radius: 20px;
-            padding: 2.5rem; 
-            text-align: left; 
-            margin-bottom: 2rem; 
-            box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+            width: 100%; max-width: 1000px; background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border: var(--glass-border); border-radius: 20px; padding: 2.5rem; text-align: left; margin-bottom: 2rem; box-shadow: 0 20px 50px rgba(0,0,0,0.6);
         }
         .info-section h3 { font-size: 1.4rem; font-weight: 600; margin-bottom: 1rem; color: #e5c158; }
         .info-section p { font-size: 1rem; color: #d4d4d4; line-height: 1.6; }
 
-        /* Support Block Layout Structure */
         .support-container {
-            width: 100%;
-            max-width: 1000px;
-            margin: 1.5rem auto;
-            padding: 2.5rem;
-            background: rgba(255, 255, 255, 0.02);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
-            border-radius: 20px;
-            border: var(--glass-border);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 2rem;
-            text-align: left;
+            width: 100%; max-width: 1000px; margin: 1.5rem auto; padding: 2.5rem; background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); border-radius: 20px; border: var(--glass-border);
+            display: flex; align-items: center; justify-content: space-between; gap: 2rem; text-align: left;
         }
-
         .support-info-block { display: flex; flex-direction: column; flex: 1; }
         .support-title { color: #fff; font-size: 1.5rem; font-weight: 600; margin-bottom: 0.75rem; }
         .support-text { color: #cbd5e1; font-size: 1.05rem; margin-bottom: 1.4rem; }
 
-        .upi-block {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            background: rgba(0, 0, 0, 0.3);
-            padding: 0.6rem 1.2rem;
-            border-radius: 30px;
-            border: 1px solid rgba(255,255,255,0.08);
-            width: fit-content;
-        }
-
+        .upi-block { display: flex; align-items: center; gap: 12px; background: rgba(0, 0, 0, 0.3); padding: 0.6rem 1.2rem; border-radius: 30px; border: 1px solid rgba(255,255,255,0.08); width: fit-content; }
         .upi-label { color: #e5c158; font-weight: 700; }
         .upi-id-text { color: #fff; font-weight: 600; }
-
-        .copy-btn {
-            background: transparent; border: none; color: #e5c158; cursor: pointer; display: flex; transition: all 0.3s ease;
-        }
+        .copy-btn { background: transparent; border: none; color: #e5c158; cursor: pointer; display: flex; transition: all 0.3s ease; }
         .copy-btn:hover { color: #fff; transform: scale(1.2); }
         .copy-btn svg { width: 16px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2.2; }
 
         .designer-credit { padding: 1.5rem; color: #888; font-size: 0.85rem; letter-spacing: 2px; text-transform: uppercase; margin-top: auto; }
         .designer-credit span { color: #fff; font-weight: 600; }
 
-        /* CRITICAL: FULLSCREEN IFRAME CONTEXT MANAGEMENT SYSTEM */
+        /* Fullscreen Routing System Configuration */
         .player-container:fullscreen {
             max-width: none !important; width: 100vw !important; height: 100vh !important;
             background: #000 !important; padding: 40px !important;
@@ -449,35 +354,16 @@
             background: #000 !important; padding: 40px !important;
             display: flex !important; flex-direction: column !important; justify-content: center !important; align-items: center !important;
         }
-
-        .player-container:fullscreen .video-area,
-        .player-container:-webkit-full-screen .video-area {
-            width: 100% !important; height: calc(100vh - 160px) !important;
-            display: flex !important; justify-content: center !important; align-items: center !important;
-        }
-
-        .player-container:fullscreen .video-wrapper,
-        .player-container:-webkit-full-screen .video-wrapper {
-            border: none !important; border-radius: 12px !important;
-            height: 100% !important; width: auto !important; max-width: 100% !important;
-            aspect-ratio: var(--current-ratio) / 1 !important;
-        }
-
-        .player-container:fullscreen .controls,
-        .player-container:-webkit-full-screen .controls {
-            margin-top: 20px !important; display: flex !important; flex-direction: row !important; flex-wrap: nowrap !important;
-        }
+        .player-container:fullscreen .video-area, .player-container:-webkit-full-screen .video-area { width: 100% !important; height: calc(100vh - 160px) !important; display: flex !important; justify-content: center !important; align-items: center !important; }
+        .player-container:fullscreen .video-wrapper, .player-container:-webkit-full-screen .video-wrapper { border: none !important; border-radius: 12px !important; height: 100% !important; width: auto !important; max-width: 100% !important; aspect-ratio: var(--current-ratio) / 1 !important; }
+        .player-container:fullscreen .controls, .player-container:-webkit-full-screen .controls { margin-top: 20px !important; display: flex !important; flex-direction: row !important; flex-wrap: nowrap !important; }
     </style>
 </head>
 <body>
 
     <nav class="navbar">
-        <div class="nav-logo-container">
-            <div style="font-weight: 800; font-size: 1.2rem; letter-spacing: 1px;">STARVEL <span style="color: #e5c158;">STUDIOS</span></div>
-        </div>
-        <div class="nav-view-counter">
-            Engine Mode: <span>Universal YT API</span>
-        </div>
+        <div style="font-weight: 800; font-size: 1.2rem; letter-spacing: 1px;">STARVEL <span style="color: #e5c158;">STUDIOS</span></div>
+        <div class="nav-view-counter">Engine Mode: <span>Universal YT API</span></div>
     </nav>
 
     <div id="bgFallback"></div>
@@ -488,14 +374,13 @@
 
     <div class="input-panel">
         <input type="text" id="youtubeUrl" class="url-input" placeholder="Paste any YouTube video link here... (e.g., https://www.youtube.com/watch?v=muuCXAlM7CU)">
-        <button class="load-btn" onclick="parseAndLoadVideo()">Load Master Stream</button>
+        <button class="load-btn" onclick="parseAndLoadVideo()">Load Stream</button>
     </div>
 
     <div id="playerContainer" class="player-container">
         <div class="video-area">
             <div class="video-wrapper" id="videoWrapper">
                 <div id="formatOverlay" class="format-overlay">DYNAMIC DISPLAY FORMAT ACTIVE</div>
-                
                 <div id="ytPlayerContainer" class="yt-frame-container"></div>
             </div>
         </div>
@@ -506,43 +391,34 @@
                 <span class="format-title">IMAX 70MM</span>
                 <span class="format-ratio">1.43:1</span>
             </button>
-
             <button class="format-btn" onclick="changeRatio(1.90, this, 'IMAX Digital', 'none')">
                 <div class="screen-icon">IMAX</div>
                 <span class="format-title">IMAX Digital</span>
                 <span class="format-ratio">1.90:1</span>
             </button>
-
             <button class="format-btn" onclick="changeRatio(2.20, this, '70MM Film Presentation', 'none')">
                 <div class="screen-icon">70MM</div>
                 <span class="format-title">70MM Film</span>
                 <span class="format-ratio">2.20:1</span>
             </button>
-
             <button class="format-btn active" onclick="changeRatio(2.39, this, '35MM Scope Presentation', 'none')">
                 <div class="screen-icon">35MM</div>
                 <span class="format-title">35MM Scope</span>
                 <span class="format-ratio">2.39:1</span>
             </button>
-
-            <button class="format-btn premium-logo-btn" onclick="changeRatio(1.85, this, 'Dolby Vision Mastering LUT Active', 'grade')">
+            <button class="format-btn" onclick="changeRatio(1.85, this, 'Dolby Vision Mastering LUT Active', 'grade')">
                 <div class="screen-icon" style="color: #fff; font-style: italic;">Dolby</div>
                 <span class="format-title" style="color: #e5c158;">Vision</span>
                 <span class="format-ratio">1.85:1</span>
             </button>
-
-            <button class="format-btn premium-logo-btn" onclick="changeRatio(1.85, this, 'Large Format Matte Layer Active', 'none')">
+            <button class="format-btn" onclick="changeRatio(1.85, this, 'Large Format Matte Layer Active', 'none')">
                 <div class="screen-icon" style="color: #fff;">LARGE</div>
                 <span class="format-title">Format</span>
                 <span class="format-ratio">1.85:1</span>
             </button>
-
             <div class="divider"></div>
-
             <button class="fullscreen-btn" onclick="toggleFullscreen()" id="fsButton">
-                <svg viewBox="0 0 24 24">
-                    <path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/>
-                </svg>
+                <svg viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>
                 <span class="format-title" style="font-size: 0.7rem;" id="fsText">FULLSCREEN</span>
             </button>
         </div>
@@ -556,7 +432,7 @@
     <section class="support-container">
         <div class="support-info-block">
             <h2 class="support-title">Support the Developer</h2>
-            <p class="support-text">If you find this version of the dynamic YouTube matrix interface helpful, consider tipping the creator!</p>
+            <p class="support-text">If you find this project interesting, consider supporting the developer.</p>
             <div class="upi-block">
                 <span class="upi-label">UPI ID:</span>
                 <span class="upi-id-text" id="upiId">sathwik.gurram@okaxis</span>
@@ -570,21 +446,18 @@
         </div>
     </section>
 
-    <footer class="designer-credit">
-        Designed By <span>G.Sathwik</span>
-    </footer>
+    <footer class="designer-credit">Designed By <span>G.Sathwik</span></footer>
 
     <script>
         let player;
-        let activeVideoId = "muuCXAlM7CU"; // Default baseline fallback video ID
+        let activeVideoId = "muuCXAlM7CU"; // Baseline initial video
 
-        // Load the IFrame Player API code asynchronously
+        // Async inject YouTube script library
         const tag = document.createElement('script');
         tag.src = "https://www.youtube.com/iframe_api";
         const firstScriptTag = document.getElementsByTagName('script')[0];
         firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
-        // This initialization execution loop executes automatically when script downloads complete
         function onYouTubeIframeAPIReady() {
             player = new YT.Player('ytPlayerContainer', {
                 height: '100%',
@@ -594,52 +467,30 @@
                     'autoplay': 1,
                     'controls': 1,
                     'rel': 0,
-                    'showinfo': 0,
                     'modestbranding': 1,
                     'loop': 1,
                     'playlist': activeVideoId,
                     'playsinline': 1
                 },
-                events: {
-                    'onReady': onPlayerReady
-                }
+                events: { 'onReady': (e) => { e.target.mute(); e.target.playVideo(); } }
             });
         }
 
-        function onPlayerReady(event) {
-            event.target.mute(); // Mute automatically to clear background parsing blocks safely
-            event.target.playVideo();
-        }
-
-        // URL link scanner system routing logic
         function parseAndLoadVideo() {
             const urlInput = document.getElementById('youtubeUrl').value.trim();
             if (!urlInput) return;
-
             let videoId = "";
-            
-            // Extract unique string tokens from standard parameters or shortened URL formats
-            if (urlInput.includes("youtu.be/")) {
-                videoId = urlInput.split("youtu.be/")[1].split(/[?#]/)[0];
-            } else if (urlInput.includes("v=")) {
-                videoId = urlInput.split("v=")[1].split("&")[0];
-            } else if (urlInput.includes("embed/")) {
-                videoId = urlInput.split("embed/")[1].split(/[?#]/)[0];
-            } else {
-                videoId = urlInput; // Fallback directly assume raw token parameters
-            }
+            if (urlInput.includes("youtu.be/")) { videoId = urlInput.split("youtu.be/")[1].split(/[?#]/)[0]; }
+            else if (urlInput.includes("v=")) { videoId = urlInput.split("v=")[1].split("&")[0]; }
+            else if (urlInput.includes("embed/")) { videoId = urlInput.split("embed/")[1].split(/[?#]/)[0]; }
+            else { videoId = urlInput; }
 
             if (videoId.length === 11) {
                 activeVideoId = videoId;
                 if (player && typeof player.loadVideoById === "function") {
-                    player.loadVideoById({
-                        videoId: activeVideoId,
-                        suggestedQuality: 'highres'
-                    });
+                    player.loadVideoById({ videoId: activeVideoId, suggestedQuality: 'highres' });
                 }
-            } else {
-                alert("Could not extract a valid 11-digit YouTube Video ID string token. Please verify URL address parameters.");
-            }
+            } else { alert("Please enter a valid YouTube link."); }
         }
 
         function changeRatio(ratio, buttonElement, badgeText, gradeMode) {
@@ -647,75 +498,44 @@
             const wrapper = document.getElementById('videoWrapper');
             const overlay = document.getElementById('formatOverlay');
             
-            // Trigger rapid custom blurring matrices
             wrapper.classList.add('vfx-blur-active');
-            setTimeout(() => {
-                wrapper.classList.remove('vfx-blur-active');
-            }, 300);
+            setTimeout(() => { wrapper.classList.remove('vfx-blur-active'); }, 300);
 
-            // Mutate layout configurations safely
             playerContainer.style.setProperty('--current-ratio', ratio);
+            if (gradeMode === 'grade') { wrapper.classList.add('dolby-grade'); } 
+            else { wrapper.classList.remove('dolby-grade'); }
 
-            if (gradeMode === 'grade') {
-                wrapper.classList.add('dolby-grade');
-            } else {
-                wrapper.classList.remove('dolby-grade');
-            }
+            if (badgeText !== 'none') { overlay.innerText = badgeText.toUpperCase(); overlay.style.display = 'block'; } 
+            else { overlay.style.display = 'none'; }
 
-            if (badgeText !== 'none') {
-                overlay.innerText = badgeText.toUpperCase();
-                overlay.style.display = 'block';
-            } else {
-                overlay.style.display = 'none';
-            }
-
-            const buttons = document.querySelectorAll('.format-btn');
-            buttons.forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.format-btn').forEach(btn => btn.classList.remove('active'));
             buttonElement.classList.add('active');
         }
 
-        const playerContainerElement = document.getElementById('playerContainer');
-        const fsText = document.getElementById('fsText');
-
         function toggleFullscreen() {
+            const pContainer = document.getElementById('playerContainer');
             if (!document.fullscreenElement && !document.webkitFullscreenElement) {
-                if (playerContainerElement.requestFullscreen) {
-                    playerContainerElement.requestFullscreen();
-                } else if (playerContainerElement.webkitRequestFullscreen) { 
-                    playerContainerElement.webkitRequestFullscreen();
-                }
+                if (pContainer.requestFullscreen) { pContainer.requestFullscreen(); } 
+                else if (pContainer.webkitRequestFullscreen) { pContainer.webkitRequestFullscreen(); }
             } else {
-                if (document.exitFullscreen) {
-                    document.exitFullscreen();
-                } else if (document.webkitExitFullscreen) { 
-                    document.webkitExitFullscreen();
-                }
+                if (document.exitFullscreen) { document.exitFullscreen(); } 
+                else if (document.webkitExitFullscreen) { document.webkitExitFullscreen(); }
             }
         }
-
-        document.addEventListener('fullscreenchange', updateFsButton);
-        document.addEventListener('webkitfullscreenchange', updateFsButton);
 
         function updateFsButton() {
-            if (document.fullscreenElement || document.webkitFullscreenElement) {
-                fsText.innerText = "EXIT FS";
-            } else {
-                fsText.innerText = "FULLSCREEN";
-            }
+            document.getElementById('fsText').innerText = (document.fullscreenElement || document.webkitFullscreenElement) ? "EXIT FS" : "FULLSCREEN";
         }
+        document.addEventListener('fullscreenchange', updateFsButton);
+        document.addEventListener('webkitfullscreenchange', updateFsButton);
 
         function copyUpiToClipboard() {
             const upiString = document.getElementById('upiId').innerText;
             const copyBtn = document.getElementById('copyBtn');
-            
             navigator.clipboard.writeText(upiString).then(() => {
                 const originalSvg = copyBtn.innerHTML;
                 copyBtn.innerHTML = `<svg viewBox="0 0 24 24" style="stroke: #e5c158;"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
-                setTimeout(() => {
-                    copyBtn.innerHTML = originalSvg;
-                }, 2000);
-            }).catch(err => {
-                console.error('Copy pipeline register error: ', err);
+                setTimeout(() => { copyBtn.innerHTML = originalSvg; }, 2000);
             });
         }
     </script>
