@@ -3,541 +3,287 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Universal YouTube Premium Formats Experience | Starvel Studios</title>
-    
-    <meta name="description" content="Explore cinematic aspects and simulation layers of any YouTube video presentation. Switch formats seamlessly between IMAX, Dolby Vision, and Large Format.">
-    <meta name="keywords" content="IMAX, YouTube Dolby Vision, Aspect Ratio Engine, Starvel Studios, G Sathwik">
-    <meta name="author" content="G. Sathwik">
-
+    <title>StreamFetch - Video & MP3 Downloader</title>
     <style>
         :root {
-            /* Apple Liquid Glass Design Variables */
-            --glass-bg: rgba(255, 255, 255, 0.05);
-            --glass-bg-hover: rgba(255, 255, 255, 0.12);
-            --glass-border: 1px solid rgba(255, 255, 255, 0.12);
-            --glass-shine: 1px solid rgba(255, 255, 255, 0.25);
-            --gold-glow: rgba(212, 175, 55, 0.25);
-            
-            /* Fluid Water-Inertia Timing Curve */
-            --water-transition: cubic-bezier(0.25, 1, 0.4, 1);
-            --water-duration: 0.65s;
-            --current-ratio: 2.39;
+            --bg-color: #0f0f0f;
+            --card-bg: #1f1f1f;
+            --accent-color: #ff0000;
+            --accent-hover: #cc0000;
+            --text-color: #ffffff;
+            --text-muted: #aaaaaa;
+            --toggle-bg: #333333;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
-        
-        body { 
-            background-color: #030303; 
-            color: #fff; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            min-height: 100vh; 
-            padding: 0 2rem 2rem 2rem; 
-            text-align: center; 
-            overflow-x: hidden;
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
-        #bgFallback {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: radial-gradient(circle at center, #141414 0%, #030303 100%);
-            z-index: -1; 
-            opacity: 0.6;
-        }
-
-        /* Smooth Page Transitions */
-        .navbar, .title-container, .input-panel, .player-container, .info-section, .support-container, .designer-credit {
-            opacity: 0;
-            transform: scale(0.97) translateY(25px);
-            animation: fluidWaterIn 1.4s var(--water-transition) forwards;
-        }
-
-        .navbar { animation-delay: 0.05s; }
-        .title-container { animation-delay: 0.1s; }
-        .input-panel { animation-delay: 0.15s; }
-        .player-container { animation-delay: 0.2s; }
-        .info-section { animation-delay: 0.25s; }
-        .support-container { animation-delay: 0.3s; }
-        .designer-credit { animation-delay: 0.35s; }
-
-        @keyframes fluidWaterIn {
-            to {
-                opacity: 1;
-                transform: scale(1) translateY(0);
-            }
-        }
-
-        /* Glass Navbar */
-        .navbar {
-            width: 100vw;
-            background: rgba(10, 10, 10, 0.4);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-bottom: var(--glass-border);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
-            padding: 0.75rem 2rem;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            margin-bottom: 2rem;
+            min-height: 100vh;
+            padding: 20px;
         }
 
-        .nav-view-counter {
-            color: #b5b5b5;
-            font-size: 0.85rem;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            font-weight: 700;
-            padding: 0.5rem 1.1rem;
-            border-radius: 30px;
-            border: var(--glass-border);
-            background: rgba(255, 255, 255, 0.03);
-        }
-        .nav-view-counter span {
-            color: #e5c158;
-            margin-left: 4px;
-        }
-
-        /* URL Input Section */
-        .input-panel {
+        .container {
+            background-color: var(--card-bg);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
             width: 100%;
-            max-width: 1000px;
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: var(--glass-border);
-            border-radius: 20px;
-            padding: 1.5rem;
-            margin-bottom: 2rem;
-            display: flex;
-            gap: 15px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+            max-width: 600px;
+            text-align: center;
         }
 
-        .url-input {
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        h1 span {
+            color: var(--accent-color);
+        }
+
+        p {
+            color: var(--text-muted);
+            margin-bottom: 25px;
+            font-size: 0.95rem;
+        }
+
+        /* Format Selector Styling */
+        .format-selector {
+            display: flex;
+            justify-content: center;
+            background-color: var(--toggle-bg);
+            padding: 5px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            gap: 5px;
+        }
+
+        .format-btn {
             flex: 1;
-            background: rgba(0,0,0,0.5);
-            border: 1px solid rgba(255,255,255,0.1);
-            padding: 0.8rem 1.5rem;
-            border-radius: 30px;
-            color: #fff;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            padding: 10px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .format-btn.active {
+            background-color: var(--accent-color);
+            color: white;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+
+        input[type="text"] {
+            flex: 1;
+            padding: 15px;
+            border: 2px solid #333;
+            border-radius: 8px;
+            background-color: #121212;
+            color: var(--text-color);
             font-size: 1rem;
             outline: none;
-            transition: all 0.3s ease;
+            transition: border-color 0.3s;
         }
 
-        .url-input:focus {
-            border-color: #e5c158;
-            box-shadow: 0 0 15px rgba(229, 193, 88, 0.2);
+        input[type="text"]:focus {
+            border-color: var(--accent-color);
         }
 
-        .load-btn {
-            background: linear-gradient(135deg, #e5c158 0%, #b89530 100%);
-            color: #000;
+        .fetch-btn {
+            background-color: #ffffff;
+            color: #000000;
             border: none;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            padding: 0 2rem;
-            border-radius: 30px;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
             cursor: pointer;
-            transition: all var(--water-duration) var(--water-transition);
+            transition: background-color 0.2s;
         }
 
-        .load-btn:hover {
-            transform: scale(1.03) translateY(-1px);
-            box-shadow: 0 8px 20px rgba(229, 193, 88, 0.3);
+        .fetch-btn:hover {
+            background-color: #e0e0e0;
         }
 
-        .title-container {
-            margin-bottom: 1rem;
-            max-width: 550px; 
-            width: 100%;
-            padding: 10px;
-        }
-        .title-container h2 {
-            font-size: 2rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            color: #fff;
-            font-weight: 800;
-            text-shadow: 0 4px 15px rgba(0,0,0,0.8);
-        }
-        .title-container h2 span { color: #e5c158; }
-
-        /* Core Video Viewport */
-        .player-container {
-            width: 100%;
-            max-width: 1000px; 
-            display: flex;
-            flex-direction: column;
-            margin: 0 auto 3rem auto;
+        .fetch-btn:disabled {
+            background-color: #555555;
+            color: #888888;
+            cursor: not-allowed;
         }
 
-        .video-area {
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-bottom: 2rem;
-        }
-
-        .video-wrapper {
-            position: relative; 
-            aspect-ratio: var(--current-ratio) / 1;
-            width: 100%;
-            background-color: #000;
-            border-radius: 20px;
-            border: var(--glass-border);
-            box-shadow: 0 30px 70px rgba(0,0,0,0.8);
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: aspect-ratio 0.85s cubic-bezier(0.25, 1, 0.2, 1);
-        }
-
-        .yt-frame-container {
-            width: 100%;
-            height: 100%;
-            transform: scale(1.01); /* Smooth bezel edge cropping */
-            transition: filter var(--water-duration) var(--water-transition), transform var(--water-duration) var(--water-transition); 
-        }
-
-        .yt-frame-container iframe { width: 100%; height: 100%; border: none; }
-
-        .vfx-blur-active .yt-frame-container {
-            filter: blur(5px) contrast(1.05);
-            transform: scale(1.03);
-        }
-
-        /* Dolby Vision Color Correction Simulation Hardware Node */
-        .dolby-grade .yt-frame-container {
-            filter: contrast(1.18) saturate(1.25) brightness(1.03) drop-shadow(0 0 30px rgba(255,255,255,0.05));
-        }
-
-        .format-overlay {
-            position: absolute;
-            top: 25px;
-            left: 25px;
-            z-index: 10;
-            pointer-events: none; 
+        .loader {
             display: none;
-            color: #fff;
-            background: rgba(0,0,0,0.6);
-            padding: 6px 12px;
-            border-radius: 6px;
-            font-size: 0.75rem;
-            font-weight: 700;
-            letter-spacing: 1px;
-            border: 1px solid rgba(255,255,255,0.1);
-            backdrop-filter: blur(5px);
-        }
-        
-        /* Control Interface Grid */
-        .controls { 
-            display: flex; 
-            gap: 12px; 
-            flex-wrap: wrap; 
-            justify-content: center; 
-            align-items: center;
-            padding-bottom: 1rem;
-        }
-        
-        .format-btn { 
-            position: relative;
-            background: var(--glass-bg);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            color: #b5b5b5; 
-            border: var(--glass-border);
-            border-radius: 16px; 
-            padding: 1.1rem 0.6rem; 
-            cursor: pointer; 
-            width: 125px; 
-            height: 90px;
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            justify-content: flex-end;
-            gap: 6px; 
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-            transition: all var(--water-duration) var(--water-transition);
-            overflow: hidden;
-        }
-
-        .format-btn::before {
-            content: '';
-            position: absolute;
-            top: 50%; left: 50%;
-            width: 0; height: 0;
-            background: radial-gradient(circle, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0) 70%);
+            margin: 20px auto;
+            border: 4px solid #333;
+            border-top: 4px solid var(--accent-color);
             border-radius: 50%;
-            transform: translate(-50%, -50%);
-            transition: width 0.75s var(--water-transition), height 0.75s var(--water-transition);
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
         }
-        
-        .format-btn:hover::before, .format-btn.active::before { width: 200px; height: 200px; }
-        .format-btn:hover { color: #fff; background: var(--glass-bg-hover); border: var(--glass-shine); transform: translateY(-4px) scale(1.03); }
-        .format-btn.active { background: rgba(255, 255, 255, 0.14); color: #fff; border: var(--glass-shine); border-color: #e5c158; box-shadow: 0 12px 30px rgba(212, 175, 55, 0.2); transform: translateY(-6px) scale(1.05); }
 
-        .format-btn > * { z-index: 2; position: relative; }
-        .format-title { font-weight: 700; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.5px; }
-        .format-ratio { font-size: 0.7rem; opacity: 0.65; font-weight: 500; }
-        .screen-icon { margin-bottom: auto; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.9rem; color: #e5c158;}
-
-        .divider { width: 1px; height: 50px; background-color: rgba(255, 255, 255, 0.15); margin: 0 8px; }
-
-        .fullscreen-btn {
-            background: var(--glass-bg);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            color: #b5b5b5;
-            border: var(--glass-border);
-            border-radius: 16px;
-            padding: 1rem;
-            cursor: pointer;
-            width: 105px;
-            height: 90px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            transition: all var(--water-duration) var(--water-transition);
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
-        .fullscreen-btn:hover { color: #fff; background: var(--glass-bg-hover); border: var(--glass-shine); transform: translateY(-4px) scale(1.03); }
-        .fullscreen-btn svg { width: 22px; height: 22px; fill: currentColor; }
-        
-        /* Supporting Copy Layouts */
-        .info-section { 
-            width: 100%; max-width: 1000px; background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-            border: var(--glass-border); border-radius: 20px; padding: 2.5rem; text-align: left; margin-bottom: 2rem; box-shadow: 0 20px 50px rgba(0,0,0,0.6);
-        }
-        .info-section h3 { font-size: 1.4rem; font-weight: 600; margin-bottom: 1rem; color: #e5c158; }
-        .info-section p { font-size: 1rem; color: #d4d4d4; line-height: 1.6; }
 
-        .support-container {
-            width: 100%; max-width: 1000px; margin: 1.5rem auto; padding: 2.5rem; background: rgba(255, 255, 255, 0.02);
-            backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); border-radius: 20px; border: var(--glass-border);
-            display: flex; align-items: center; justify-content: space-between; gap: 2rem; text-align: left;
+        .result-card {
+            display: none;
+            margin-top: 25px;
+            padding: 20px;
+            background-color: #1a1a1a;
+            border-radius: 8px;
+            border: 1px solid #333;
+            text-align: left;
         }
-        .support-info-block { display: flex; flex-direction: column; flex: 1; }
-        .support-title { color: #fff; font-size: 1.5rem; font-weight: 600; margin-bottom: 0.75rem; }
-        .support-text { color: #cbd5e1; font-size: 1.05rem; margin-bottom: 1.4rem; }
 
-        .upi-block { display: flex; align-items: center; gap: 12px; background: rgba(0, 0, 0, 0.3); padding: 0.6rem 1.2rem; border-radius: 30px; border: 1px solid rgba(255,255,255,0.08); width: fit-content; }
-        .upi-label { color: #e5c158; font-weight: 700; }
-        .upi-id-text { color: #fff; font-weight: 600; }
-        .copy-btn { background: transparent; border: none; color: #e5c158; cursor: pointer; display: flex; transition: all 0.3s ease; }
-        .copy-btn:hover { color: #fff; transform: scale(1.2); }
-        .copy-btn svg { width: 16px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2.2; }
-
-        .designer-credit { padding: 1.5rem; color: #888; font-size: 0.85rem; letter-spacing: 2px; text-transform: uppercase; margin-top: auto; }
-        .designer-credit span { color: #fff; font-weight: 600; }
-
-        /* Fullscreen Routing System Configuration */
-        .player-container:fullscreen {
-            max-width: none !important; width: 100vw !important; height: 100vh !important;
-            background: #000 !important; padding: 40px !important;
-            display: flex !important; flex-direction: column !important; justify-content: center !important; align-items: center !important;
+        .video-title {
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            color: var(--text-color);
         }
-        .player-container:-webkit-full-screen {
-            max-width: none !important; width: 100vw !important; height: 100vh !important;
-            background: #000 !important; padding: 40px !important;
-            display: flex !important; flex-direction: column !important; justify-content: center !important; align-items: center !important;
+
+        .download-btn {
+            display: inline-block;
+            width: 100%;
+            text-align: center;
+            background-color: #28a745;
+            color: white;
+            text-decoration: none;
+            padding: 12px;
+            border-radius: 6px;
+            font-weight: 600;
+            transition: background-color 0.2s;
         }
-        .player-container:fullscreen .video-area, .player-container:-webkit-full-screen .video-area { width: 100% !important; height: calc(100vh - 160px) !important; display: flex !important; justify-content: center !important; align-items: center !important; }
-        .player-container:fullscreen .video-wrapper, .player-container:-webkit-full-screen .video-wrapper { border: none !important; border-radius: 12px !important; height: 100% !important; width: auto !important; max-width: 100% !important; aspect-ratio: var(--current-ratio) / 1 !important; }
-        .player-container:fullscreen .controls, .player-container:-webkit-full-screen .controls { margin-top: 20px !important; display: flex !important; flex-direction: row !important; flex-wrap: nowrap !important; }
+
+        .download-btn:hover {
+            opacity: 0.9;
+        }
+
+        .error-msg {
+            display: none;
+            color: #ff4444;
+            margin-top: 15px;
+            font-size: 0.9rem;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
 
-    <nav class="navbar">
-        <div style="font-weight: 800; font-size: 1.2rem; letter-spacing: 1px;">STARVEL <span style="color: #e5c158;">STUDIOS</span></div>
-        <div class="nav-view-counter">Engine Mode: <span>Universal YT API</span></div>
-    </nav>
+<div class="container">
+    <h1>Stream<span>Fetch</span></h1>
+    <p>Convert and download YouTube videos or extract MP3 audio files.</p>
 
-    <div id="bgFallback"></div>
-
-    <div class="title-container">
-        <h2>Cinematic <span>Formats Engine</span></h2>
+    <div class="format-selector">
+        <button type="button" class="format-btn active" id="mp4Toggle" onclick="setFormat('mp4')">Video (MP4)</button>
+        <button type="button" class="format-btn" id="mp3Toggle" onclick="setFormat('mp3')">Audio (MP3)</button>
     </div>
 
-    <div class="input-panel">
-        <input type="text" id="youtubeUrl" class="url-input" placeholder="Paste any YouTube video link here... (e.g., https://www.youtube.com/watch?v=muuCXAlM7CU)">
-        <button class="load-btn" onclick="parseAndLoadVideo()">Load Stream</button>
+    <div class="input-group">
+        <input type="text" id="videoUrl" placeholder="Paste YouTube link here...">
+        <button id="fetchBtn" class="fetch-btn" onclick="fetchMedia()">Fetch</button>
     </div>
 
-    <div id="playerContainer" class="player-container">
-        <div class="video-area">
-            <div class="video-wrapper" id="videoWrapper">
-                <div id="formatOverlay" class="format-overlay">DYNAMIC DISPLAY FORMAT ACTIVE</div>
-                <div id="ytPlayerContainer" class="yt-frame-container"></div>
-            </div>
-        </div>
+    <div class="loader" id="loader"></div>
+    <div class="error-msg" id="errorMsg">Failed to process. Make sure your Python backend (app.py) is running!</div>
 
-        <div class="controls">
-            <button class="format-btn" onclick="changeRatio(1.43, this, 'IMAX 70MM', 'none')">
-                <div class="screen-icon">IMAX</div>
-                <span class="format-title">IMAX 70MM</span>
-                <span class="format-ratio">1.43:1</span>
-            </button>
-            <button class="format-btn" onclick="changeRatio(1.90, this, 'IMAX Digital', 'none')">
-                <div class="screen-icon">IMAX</div>
-                <span class="format-title">IMAX Digital</span>
-                <span class="format-ratio">1.90:1</span>
-            </button>
-            <button class="format-btn" onclick="changeRatio(2.20, this, '70MM Film Presentation', 'none')">
-                <div class="screen-icon">70MM</div>
-                <span class="format-title">70MM Film</span>
-                <span class="format-ratio">2.20:1</span>
-            </button>
-            <button class="format-btn active" onclick="changeRatio(2.39, this, '35MM Scope Presentation', 'none')">
-                <div class="screen-icon">35MM</div>
-                <span class="format-title">35MM Scope</span>
-                <span class="format-ratio">2.39:1</span>
-            </button>
-            <button class="format-btn" onclick="changeRatio(1.85, this, 'Dolby Vision Mastering LUT Active', 'grade')">
-                <div class="screen-icon" style="color: #fff; font-style: italic;">Dolby</div>
-                <span class="format-title" style="color: #e5c158;">Vision</span>
-                <span class="format-ratio">1.85:1</span>
-            </button>
-            <button class="format-btn" onclick="changeRatio(1.85, this, 'Large Format Matte Layer Active', 'none')">
-                <div class="screen-icon" style="color: #fff;">LARGE</div>
-                <span class="format-title">Format</span>
-                <span class="format-ratio">1.85:1</span>
-            </button>
-            <div class="divider"></div>
-            <button class="fullscreen-btn" onclick="toggleFullscreen()" id="fsButton">
-                <svg viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>
-                <span class="format-title" style="font-size: 0.7rem;" id="fsText">FULLSCREEN</span>
-            </button>
-        </div>
+    <div class="result-card" id="resultCard">
+        <div class="video-title" id="videoTitle">Media Title</div>
+        <a href="#" id="dlLink" class="download-btn">Download File</a>
     </div>
+</div>
 
-    <section class="info-section">
-        <h3>Universal Cross-Origin YouTube Grading Node Documentation</h3>
-        <p>This deployment wraps the asynchronous iframe endpoints provided by YouTube's development servers inside an isolated hardware CSS pipeline. By enforcing a unified container scope context, developers can overlay complex viewport profiles (e.g., Ultra-wide Anamorphic 2.39:1 profiles or IMAX 1.43:1 expanded headers) and enforce real-time saturation boost algorithms mimicking Dolby dynamic ranges without losing access to native playback protocols.</p>
-    </section>
+<script>
+    let selectedFormat = 'mp4';
 
-    <section class="support-container">
-        <div class="support-info-block">
-            <h2 class="support-title">Support the Developer</h2>
-            <p class="support-text">If you find this project interesting, consider supporting the developer.</p>
-            <div class="upi-block">
-                <span class="upi-label">UPI ID:</span>
-                <span class="upi-id-text" id="upiId">sathwik.gurram@okaxis</span>
-                <button class="copy-btn" onclick="copyUpiToClipboard()" title="Copy UPI ID" id="copyBtn">
-                    <svg viewBox="0 0 24 24">
-                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2" stroke="currentColor" fill="none"></rect>
-                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" stroke="currentColor"></path>
-                    </svg>
-                </button>
-            </div>
-        </div>
-    </section>
+    function setFormat(format) {
+        selectedFormat = format;
+        document.getElementById('mp4Toggle').classList.toggle('active', format === 'mp4');
+        document.getElementById('mp3Toggle').classList.toggle('active', format === 'mp3');
+        document.getElementById('resultCard').style.display = 'none';
+    }
 
-    <footer class="designer-credit">Designed By <span>G.Sathwik</span></footer>
+    async function fetchMedia() {
+        const urlInput = document.getElementById('videoUrl').value.trim();
+        const fetchBtn = document.getElementById('fetchBtn');
+        const loader = document.getElementById('loader');
+        const resultCard = document.getElementById('resultCard');
+        const errorMsg = document.getElementById('errorMsg');
 
-    <script>
-        let player;
-        let activeVideoId = "muuCXAlM7CU"; // Baseline initial video
+        if (!urlInput) {
+            alert('Please paste a valid YouTube URL first!');
+            return;
+        }
 
-        // Async inject YouTube script library
-        const tag = document.createElement('script');
-        tag.src = "https://www.youtube.com/iframe_api";
-        const firstScriptTag = document.getElementsByTagName('script')[0];
-        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+        // Reset UI Layout
+        errorMsg.style.display = 'none';
+        resultCard.style.display = 'none';
+        loader.style.display = 'block';
+        fetchBtn.disabled = true;
 
-        function onYouTubeIframeAPIReady() {
-            player = new YT.Player('ytPlayerContainer', {
-                height: '100%',
-                width: '100%',
-                videoId: activeVideoId,
-                playerVars: {
-                    'autoplay': 1,
-                    'controls': 1,
-                    'rel': 0,
-                    'modestbranding': 1,
-                    'loop': 1,
-                    'playlist': activeVideoId,
-                    'playsinline': 1
-                },
-                events: { 'onReady': (e) => { e.target.mute(); e.target.playVideo(); } }
+        try {
+            // Post request to local Flask backend server
+            const response = await fetch('http://127.0.0.1:5000/download', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ url: urlInput, format: selectedFormat })
             });
-        }
 
-        function parseAndLoadVideo() {
-            const urlInput = document.getElementById('youtubeUrl').value.trim();
-            if (!urlInput) return;
-            let videoId = "";
-            if (urlInput.includes("youtu.be/")) { videoId = urlInput.split("youtu.be/")[1].split(/[?#]/)[0]; }
-            else if (urlInput.includes("v=")) { videoId = urlInput.split("v=")[1].split("&")[0]; }
-            else if (urlInput.includes("embed/")) { videoId = urlInput.split("embed/")[1].split(/[?#]/)[0]; }
-            else { videoId = urlInput; }
+            if (!response.ok) throw new Error('Conversion backend failure');
 
-            if (videoId.length === 11) {
-                activeVideoId = videoId;
-                if (player && typeof player.loadVideoById === "function") {
-                    player.loadVideoById({ videoId: activeVideoId, suggestedQuality: 'highres' });
-                }
-            } else { alert("Please enter a valid YouTube link."); }
-        }
-
-        function changeRatio(ratio, buttonElement, badgeText, gradeMode) {
-            const playerContainer = document.getElementById('playerContainer');
-            const wrapper = document.getElementById('videoWrapper');
-            const overlay = document.getElementById('formatOverlay');
+            // Receive file as binary blob data stream
+            const blob = await response.blob();
+            const downloadUrl = window.URL.createObjectURL(blob);
             
-            wrapper.classList.add('vfx-blur-active');
-            setTimeout(() => { wrapper.classList.remove('vfx-blur-active'); }, 300);
+            const dlLink = document.getElementById('dlLink');
+            dlLink.href = downloadUrl;
+            
+            // Set download attribute so it saves the file locally instead of navigating away
+            dlLink.download = selectedFormat === 'mp3' ? "audio.mp3" : "video.mp4";
+            document.getElementById('videoTitle').innerText = "✨ File ready to save!";
 
-            playerContainer.style.setProperty('--current-ratio', ratio);
-            if (gradeMode === 'grade') { wrapper.classList.add('dolby-grade'); } 
-            else { wrapper.classList.remove('dolby-grade'); }
-
-            if (badgeText !== 'none') { overlay.innerText = badgeText.toUpperCase(); overlay.style.display = 'block'; } 
-            else { overlay.style.display = 'none'; }
-
-            document.querySelectorAll('.format-btn').forEach(btn => btn.classList.remove('active'));
-            buttonElement.classList.add('active');
-        }
-
-        function toggleFullscreen() {
-            const pContainer = document.getElementById('playerContainer');
-            if (!document.fullscreenElement && !document.webkitFullscreenElement) {
-                if (pContainer.requestFullscreen) { pContainer.requestFullscreen(); } 
-                else if (pContainer.webkitRequestFullscreen) { pContainer.webkitRequestFullscreen(); }
+            if (selectedFormat === 'mp3') {
+                dlLink.innerText = "Save Audio File (.mp3)";
+                dlLink.style.backgroundColor = "#007bff"; // Blue button for audio
             } else {
-                if (document.exitFullscreen) { document.exitFullscreen(); } 
-                else if (document.webkitExitFullscreen) { document.webkitExitFullscreen(); }
+                dlLink.innerText = "Save Video File (.mp4)";
+                dlLink.style.backgroundColor = "#28a745"; // Green button for video
             }
-        }
 
-        function updateFsButton() {
-            document.getElementById('fsText').innerText = (document.fullscreenElement || document.webkitFullscreenElement) ? "EXIT FS" : "FULLSCREEN";
-        }
-        document.addEventListener('fullscreenchange', updateFsButton);
-        document.addEventListener('webkitfullscreenchange', updateFsButton);
+            loader.style.display = 'none';
+            fetchBtn.disabled = false;
+            resultCard.style.display = 'block';
 
-        function copyUpiToClipboard() {
-            const upiString = document.getElementById('upiId').innerText;
-            const copyBtn = document.getElementById('copyBtn');
-            navigator.clipboard.writeText(upiString).then(() => {
-                const originalSvg = copyBtn.innerHTML;
-                copyBtn.innerHTML = `<svg viewBox="0 0 24 24" style="stroke: #e5c158;"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
-                setTimeout(() => { copyBtn.innerHTML = originalSvg; }, 2000);
-            });
+        } catch (error) {
+            loader.style.display = 'none';
+            fetchBtn.disabled = false;
+            errorMsg.style.display = 'block';
+            console.error("Backend Error: ", error);
         }
-    </script>
+    }
+</script>
+
 </body>
 </html>
