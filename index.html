@@ -2,288 +2,172 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StreamFetch - Video & MP3 Downloader</title>
+    <title>STARVEL Downloader</title>
     <style>
-        :root {
-            --bg-color: #0f0f0f;
-            --card-bg: #1f1f1f;
-            --accent-color: #ff0000;
-            --accent-hover: #cc0000;
-            --text-color: #ffffff;
-            --text-muted: #aaaaaa;
-            --toggle-bg: #333333;
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; user-select: none; }
+        body { background: #050505; color: #ffffff; height: 100vh; overflow: hidden; }
+
+        #bgVideo {
+            position: absolute; top: 50%; left: 50%; min-width: 100%; min-height: 100%;
+            z-index: -2; transform: translate(-50%, -50%); object-fit: cover;
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        .video-tint {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(13, 13, 13, 0.85); z-index: -1;
         }
 
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 20px;
+        .app-container {
+            width: 100%; height: 100%; background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(35px); -webkit-backdrop-filter: blur(35px);
+            border: 1px solid rgba(255, 255, 255, 0.1); display: flex;
+            flex-direction: column; padding: 30px;
         }
 
-        .container {
-            background-color: var(--card-bg);
-            padding: 40px;
-            border-radius: 12px;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
-            width: 100%;
-            max-width: 600px;
-            text-align: center;
-        }
+        .header { text-align: center; margin-bottom: 20px; }
+        .logo-container img { max-height: 70px; width: auto; }
+        .header p { color: rgba(255, 255, 255, 0.5); font-size: 0.85rem; }
 
-        h1 {
-            font-size: 2rem;
-            margin-bottom: 10px;
-            font-weight: 700;
+        .url-input {
+            width: 100%; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 14px; padding: 18px; color: #fff; font-size: 1rem;
+            outline: none; text-align: center; transition: 0.3s;
         }
+        .url-input:focus { border-color: rgba(255, 255, 255, 0.4); background: rgba(255, 255, 255, 0.06); }
 
-        h1 span {
-            color: var(--accent-color);
+        .thumbnail-box { 
+            display: none; text-align: center; margin: 15px auto; 
+            background: rgba(255, 255, 255, 0.04); border-radius: 16px; padding: 10px; max-width: 300px;
         }
+        .thumbnail-box img { width: 100%; border-radius: 10px; }
 
-        p {
-            color: var(--text-muted);
-            margin-bottom: 25px;
-            font-size: 0.95rem;
+        .mode-container {
+            display: flex; background: rgba(0, 0, 0, 0.3); border-radius: 12px;
+            padding: 5px; margin-bottom: 25px; gap: 5px;
         }
+        .mode-toggle {
+            flex: 1; background: transparent; border: none; color: rgba(255, 255, 255, 0.4);
+            padding: 12px; font-weight: 700; cursor: pointer; border-radius: 8px;
+        }
+        .mode-toggle.active { background: rgba(255, 255, 255, 0.1); color: #fff; }
 
-        /* Format Selector Styling */
-        .format-selector {
-            display: flex;
-            justify-content: center;
-            background-color: var(--toggle-bg);
-            padding: 5px;
-            border-radius: 8px;
-            margin-bottom: 25px;
-            gap: 5px;
+        .quality-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 130px));
+            gap: 15px; justify-content: center; margin-bottom: 30px;
         }
+        .quality-card {
+            background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px; padding: 20px; cursor: pointer; text-align: center; transition: 0.3s;
+        }
+        .quality-card:hover { background: rgba(255, 255, 255, 0.1); transform: translateY(-5px); }
+        .quality-text { font-size: 1.5rem; font-weight: 800; color: #fff; }
 
-        .format-btn {
-            flex: 1;
-            background: none;
-            border: none;
-            color: var(--text-muted);
-            padding: 10px;
-            font-size: 0.95rem;
-            font-weight: 600;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: all 0.2s ease;
+        .progress-box { display: none; background: rgba(0, 0, 0, 0.3); border-radius: 14px; padding: 20px; }
+        .bar-bg { width: 100%; height: 15px; background: rgba(255, 255, 255, 0.1); border-radius: 8px; overflow: hidden; }
+        .bar-fill { 
+            width: 0%; height: 100%; background: rgba(255, 255, 255, 0.6); border-radius: 8px; 
+            animation: water 2s infinite linear;
         }
+        @keyframes water { 0% { background-position: 0 0; } 100% { background-position: 100% 0; } }
 
-        .format-btn.active {
-            background-color: var(--accent-color);
-            color: white;
-        }
-
-        .input-group {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 25px;
-        }
-
-        input[type="text"] {
-            flex: 1;
-            padding: 15px;
-            border: 2px solid #333;
-            border-radius: 8px;
-            background-color: #121212;
-            color: var(--text-color);
-            font-size: 1rem;
-            outline: none;
-            transition: border-color 0.3s;
-        }
-
-        input[type="text"]:focus {
-            border-color: var(--accent-color);
-        }
-
-        .fetch-btn {
-            background-color: #ffffff;
-            color: #000000;
-            border: none;
-            padding: 15px 30px;
-            border-radius: 8px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background-color 0.2s;
-        }
-
-        .fetch-btn:hover {
-            background-color: #e0e0e0;
-        }
-
-        .fetch-btn:disabled {
-            background-color: #555555;
-            color: #888888;
-            cursor: not-allowed;
-        }
-
-        .loader {
-            display: none;
-            margin: 20px auto;
-            border: 4px solid #333;
-            border-top: 4px solid var(--accent-color);
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .result-card {
-            display: none;
-            margin-top: 25px;
-            padding: 20px;
-            background-color: #1a1a1a;
-            border-radius: 8px;
-            border: 1px solid #333;
-            text-align: left;
-        }
-
-        .video-title {
-            font-weight: 600;
-            font-size: 1.1rem;
-            margin-bottom: 15px;
-            color: var(--text-color);
-        }
-
-        .download-btn {
-            display: inline-block;
-            width: 100%;
-            text-align: center;
-            background-color: #28a745;
-            color: white;
-            text-decoration: none;
-            padding: 12px;
-            border-radius: 6px;
-            font-weight: 600;
-            transition: background-color 0.2s;
-        }
-
-        .download-btn:hover {
-            opacity: 0.9;
-        }
-
-        .error-msg {
-            display: none;
-            color: #ff4444;
-            margin-top: 15px;
-            font-size: 0.9rem;
-            text-align: center;
-        }
+        .footer { display: flex; justify-content: space-between; align-items: center; margin-top: auto; }
+        .folder-btn { background: rgba(255, 255, 255, 0.05); color: #fff; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 10px; padding: 12px 20px; cursor: pointer; }
     </style>
 </head>
 <body>
+    <video autoplay muted loop playsinline id="bgVideo"><source src="neon.mp4" type="video/mp4"></video>
+    <div class="video-tint"></div>
 
-<div class="container">
-    <h1>Stream<span>Fetch</span></h1>
-    <p>Convert and download YouTube videos or extract MP3 audio files.</p>
+    <div class="app-container">
+        <div class="header">
+            <div class="logo-container"><img src="starvel_logo.png" alt="STARVEL"></div>
+            <p>Standalone High-Speed Desktop Video & Audio Extractor</p>
+        </div>
 
-    <div class="format-selector">
-        <button type="button" class="format-btn active" id="mp4Toggle" onclick="setFormat('mp4')">Video (MP4)</button>
-        <button type="button" class="format-btn" id="mp3Toggle" onclick="setFormat('mp3')">Audio (MP3)</button>
+        <input type="text" id="urlInput" class="url-input" placeholder="Paste the YouTube Video Link here" oninput="handleUrlInputChange()">
+
+        <div class="thumbnail-box" id="thumbBox">
+            <img id="thumbImg" src="" alt="Preview">
+            <div id="thumbTitle" style="font-size: 0.8rem; margin-top: 5px;"></div>
+        </div>
+
+        <div class="mode-container">
+            <button id="modeVideo" class="mode-toggle active" onclick="switchMode('video')">Video Extraction Mode</button>
+            <button id="modeAudio" class="mode-toggle" onclick="switchMode('audio')">Audio Extraction Mode</button>
+        </div>
+
+        <div class="quality-grid" id="grid"></div>
+
+        <div class="progress-box" id="progressBox">
+            <div id="statusTxt" style="margin-bottom: 10px; font-size: 0.9rem;">Status: Initializing...</div>
+            <div class="bar-bg"><div id="barFill" class="bar-fill"></div></div>
+        </div>
+
+        <div class="footer">
+            <button class="folder-btn" onclick="triggerOpenFolder()">Open Downloads Folder</button>
+            <div style="text-align: right; color: rgba(255,255,255,0.3);">v1.2.0 STABLE<br>Designed By Sathwik</div>
+        </div>
     </div>
 
-    <div class="input-group">
-        <input type="text" id="videoUrl" placeholder="Paste YouTube link here...">
-        <button id="fetchBtn" class="fetch-btn" onclick="fetchMedia()">Fetch</button>
-    </div>
+    <script>
+        let selectedMode = 'video';
+        const qualities = {
+            video: ['320p', '480p', '720p', '1080p', '4K'],
+            audio: ['MP3']
+        };
 
-    <div class="loader" id="loader"></div>
-    <div class="error-msg" id="errorMsg">Failed to process. Make sure your Python backend (app.py) is running!</div>
-
-    <div class="result-card" id="resultCard">
-        <div class="video-title" id="videoTitle">Media Title</div>
-        <a href="#" id="dlLink" class="download-btn">Download File</a>
-    </div>
-</div>
-
-<script>
-    let selectedFormat = 'mp4';
-
-    function setFormat(format) {
-        selectedFormat = format;
-        document.getElementById('mp4Toggle').classList.toggle('active', format === 'mp4');
-        document.getElementById('mp3Toggle').classList.toggle('active', format === 'mp3');
-        document.getElementById('resultCard').style.display = 'none';
-    }
-
-    async function fetchMedia() {
-        const urlInput = document.getElementById('videoUrl').value.trim();
-        const fetchBtn = document.getElementById('fetchBtn');
-        const loader = document.getElementById('loader');
-        const resultCard = document.getElementById('resultCard');
-        const errorMsg = document.getElementById('errorMsg');
-
-        if (!urlInput) {
-            alert('Please paste a valid YouTube URL first!');
-            return;
-        }
-
-        // Reset UI Layout
-        errorMsg.style.display = 'none';
-        resultCard.style.display = 'none';
-        loader.style.display = 'block';
-        fetchBtn.disabled = true;
-
-        try {
-            // Post request to local Flask backend server
-            const response = await fetch('http://127.0.0.1:5000/download', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ url: urlInput, format: selectedFormat })
+        function renderGrid() {
+            const grid = document.getElementById('grid');
+            grid.innerHTML = '';
+            qualities[selectedMode].forEach(q => {
+                const card = document.createElement('div');
+                card.className = 'quality-card';
+                card.innerHTML = `<div class="quality-text">${q}</div>`;
+                card.onclick = () => runDownload(q);
+                grid.appendChild(card);
             });
-
-            if (!response.ok) throw new Error('Conversion backend failure');
-
-            // Receive file as binary blob data stream
-            const blob = await response.blob();
-            const downloadUrl = window.URL.createObjectURL(blob);
-            
-            const dlLink = document.getElementById('dlLink');
-            dlLink.href = downloadUrl;
-            
-            // Set download attribute so it saves the file locally instead of navigating away
-            dlLink.download = selectedFormat === 'mp3' ? "audio.mp3" : "video.mp4";
-            document.getElementById('videoTitle').innerText = "✨ File ready to save!";
-
-            if (selectedFormat === 'mp3') {
-                dlLink.innerText = "Save Audio File (.mp3)";
-                dlLink.style.backgroundColor = "#007bff"; // Blue button for audio
-            } else {
-                dlLink.innerText = "Save Video File (.mp4)";
-                dlLink.style.backgroundColor = "#28a745"; // Green button for video
-            }
-
-            loader.style.display = 'none';
-            fetchBtn.disabled = false;
-            resultCard.style.display = 'block';
-
-        } catch (error) {
-            loader.style.display = 'none';
-            fetchBtn.disabled = false;
-            errorMsg.style.display = 'block';
-            console.error("Backend Error: ", error);
         }
-    }
-</script>
 
+        function switchMode(m) {
+            selectedMode = m;
+            document.getElementById('modeVideo').classList.toggle('active', m === 'video');
+            document.getElementById('modeAudio').classList.toggle('active', m === 'audio');
+            renderGrid();
+        }
+
+        function handleUrlInputChange() {
+            const url = document.getElementById('urlInput').value.trim();
+            if (url.includes("youtube.com") || url.includes("youtu.be")) {
+                document.getElementById('thumbBox').style.display = 'block';
+                fetch('http://localhost:5000/fetch-metadata', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({url})
+                })
+                .then(r => r.json())
+                .then(d => {
+                    document.getElementById('thumbImg').src = d.thumbnail;
+                    document.getElementById('thumbTitle').innerText = d.title;
+                });
+            }
+        }
+
+        function runDownload(q) {
+            document.getElementById('progressBox').style.display = 'block';
+            fetch('http://localhost:5000/download', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({url: document.getElementById('urlInput').value, mode: selectedMode, quality: q})
+            })
+            .then(() => {
+                document.getElementById('statusTxt').innerText = "Status: Complete!";
+                document.getElementById('barFill').style.width = "100%";
+            });
+        }
+
+        function triggerOpenFolder() { fetch('http://localhost:5000/open-folder', { method: 'POST' }); }
+        
+        switchMode('video');
+    </script>
 </body>
 </html>
