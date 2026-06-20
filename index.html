@@ -11,11 +11,10 @@
             --accent-color: #0078d4;
             --text-color: #ffffff;
             
-            /* Dynamic variables updated in real-time by the sliders */
+            /* Modern GPU hardware variables */
             --contrast-val: 1.0;
             --saturate-val: 1.0;
             --brightness-val: 1.0;
-            --sharpness-val: 0px;
         }
 
         body {
@@ -98,7 +97,7 @@
             aspect-ratio: 16/9;
         }
 
-        /* The official embedded YouTube iframe container */
+        /* The actual iframe target window container */
         #player {
             width: 100%;
             height: 100%;
@@ -106,19 +105,15 @@
             display: block;
         }
 
-        /* The Hardware Acceleration Shader Overlay Window 
-           Applies real-time matrix grading layers safely on top of the stream
-        */
+        /* Real-time hardware filter execution panel layered cleanly above the target frame */
         .shader-matrix-overlay {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            pointer-events: none; /* Allows clicks to pass through to YouTube controls natively */
-            mix-blend-mode: normal;
+            pointer-events: none; /* Passes mouse interactions directly down to YouTube buttons */
             
-            /* Connects GPU properties through CSS filters */
             filter: 
                 contrast(var(--contrast-val)) 
                 saturate(var(--saturate-val)) 
@@ -164,7 +159,7 @@
 <body>
 
 <div class="container">
-    <h2>Web YouTube AI Enhancer <span class="ai-badge">STABLE IFRAME API MODE</span></h2>
+    <h2>Web YouTube AI Enhancer <span class="ai-badge">LIVE ENGINE RUNNING</span></h2>
     
     <div class="input-group">
         <input type="text" id="video-url" placeholder="Paste standard YouTube watch link..." value="https://www.youtube.com/watch?v=MtmvUdsxoEl">
@@ -179,7 +174,7 @@
     <div class="dashboard">
         <div class="control-block">
             <label for="ai-intensity">AI Neural Sharpness Scale:</label>
-            <input type="range" id="ai-intensity" min="0.0" max="3.0" step="0.2" value="1.0" oninput="updateAIParameters()">
+            <input type="range" id="ai-intensity" min="0.0" max="3.0" step="0.2" value="1.2" oninput="updateAIParameters()">
         </div>
 
         <div class="control-block">
@@ -196,22 +191,19 @@
 <svg width="0" height="0" style="position:absolute; z-index:-1;">
     <filter id="ai-spatial-sharpener">
         <feConvolveMatrix id="matrix-kernel" order="3" preserveAlpha="true"
-            kernelMatrix="0  0  0 
-                          0  1  0 
-                          0  0  0"/>
+            kernelMatrix="0 0 0 0 1 0 0 0 0"/>
     </filter>
 </svg>
 
 <script src="https://www.youtube.com/iframe_api"></script>
 
 <script>
-    let player;
+    let player = null;
     let isApiReady = false;
 
-    // Triggered automatically when the official tracking bundle script drops inside DOM layers
+    // Fired automatically by the YouTube API script script line once ready
     function onYouTubeIframeAPIReady() {
         isApiReady = true;
-        // Seed default template content load
         loadNewStream();
     }
 
@@ -224,40 +216,37 @@
     function loadNewStream() {
         if (!isApiReady) return;
 
-        let url = document.getElementById('video-url').value.strip ? document.getElementById('video-url').value.strip() : document.getElementById('video-url').value;
-        let videoId = extractVideoId(url);
+        let urlInput = document.getElementById('video-url').value;
+        let videoId = extractVideoId(urlInput);
 
         if (!videoId) {
-            alert("Invalid YouTube URL. Please enter a valid watch link structure.");
+            alert("Invalid YouTube URL structure.");
             return;
         }
 
-        // If a player instance already exists, safely swap out the video track instantly
+        // If instance exists, recycle context memory directly
         if (player && typeof player.loadVideoById === 'function') {
-            player.loadVideoById({ videoId: videoId, suggestedQuality: 'hd1080' });
+            player.loadVideoById({ videoId: videoId });
             updateAIParameters();
             return;
         }
 
-        // Initialize the safe official instance container target structural block
+        // Fresh frame initialization block mount
         player = new YT.Player('player', {
             videoId: videoId,
             playerVars: {
                 'rel': 0,
                 'autoplay': 1,
                 'playsinline': 1,
-                'vq': 'hd1080',
                 'modestbranding': 1
             },
             events: {
-                'onReady': onPlayerReady
+                'onReady': (event) => {
+                    event.target.playVideo();
+                    updateAIParameters();
+                }
             }
         });
-    }
-
-    function onPlayerReady(event) {
-        event.target.playVideo();
-        updateAIParameters();
     }
 
     function updateAIParameters() {
@@ -267,27 +256,22 @@
         let root = document.documentElement;
         let matrixKernel = document.getElementById('matrix-kernel');
 
-        // Configure Edge Upscaler Convolution parameters dynamically
-        // High sharpening matrix representation: 
-        // [ 0, -k,  0]
-        // [-k, 1+4k,-k]
-        // [ 0, -k,  0]
-        let k = intensity * 0.4;
+        // Apply high-frequency edge scaling algorithm directly onto the convolution filter step
+        let k = intensity * 0.35;
         let center = 1.0 + (4.0 * k);
         let kernelString = `0 ${-k} 0 ${-k} ${center} ${-k} 0 ${-k} 0`;
         matrixKernel.setAttribute('kernelMatrix', kernelString);
 
-        // Adjust Color Volume profiles to mirror Dolby Vision dynamic tone-mapping layers
+        // Adjust grading modifiers
         if (profileString === 'cinematic') {
-            root.style.setProperty('--contrast-val', '1.20');
-            root.style.setProperty('--saturate-val', '1.15');
-            root.style.setProperty('--brightness-val', '0.96');
+            root.style.setProperty('--contrast-val', '1.18');
+            root.style.setProperty('--saturate-val', '1.12');
+            root.style.setProperty('--brightness-val', '0.97');
         } else if (profileString === 'vivid') {
-            root.style.setProperty('--contrast-val', '1.35');
-            root.style.setProperty('--saturate-val', '1.50');
-            root.style.setProperty('--brightness-val', '1.05');
+            root.style.setProperty('--contrast-val', '1.30');
+            root.style.setProperty('--saturate-val', '1.45');
+            root.style.setProperty('--brightness-val', '1.04');
         } else {
-            // Raw passthrough modes fallback parameters
             root.style.setProperty('--contrast-val', '1.0');
             root.style.setProperty('--saturate-val', '1.0');
             root.style.setProperty('--brightness-val', '1.0');
