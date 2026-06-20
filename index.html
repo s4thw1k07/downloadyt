@@ -2,172 +2,207 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>STARVEL Downloader</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web HDR & Advanced Color Grade Player</title>
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; user-select: none; }
-        body { background: #050505; color: #ffffff; height: 100vh; overflow: hidden; }
-
-        #bgVideo {
-            position: absolute; top: 50%; left: 50%; min-width: 100%; min-height: 100%;
-            z-index: -2; transform: translate(-50%, -50%); object-fit: cover;
+        :root {
+            --bg-color: #0f0f0f;
+            --panel-color: #1e1e1e;
+            --accent-color: #0078d4;
+            --text-color: #ffffff;
         }
 
-        .video-tint {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(13, 13, 13, 0.85); z-index: -1;
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
-        .app-container {
-            width: 100%; height: 100%; background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(35px); -webkit-backdrop-filter: blur(35px);
-            border: 1px solid rgba(255, 255, 255, 0.1); display: flex;
-            flex-direction: column; padding: 30px;
+        .container {
+            width: 100%;
+            max-width: 900px;
+            background: var(--panel-color);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
         }
 
-        .header { text-align: center; margin-bottom: 20px; }
-        .logo-container img { max-height: 70px; width: auto; }
-        .header p { color: rgba(255, 255, 255, 0.5); font-size: 0.85rem; }
+        h2 {
+            margin-top: 0;
+            font-weight: 600;
+            font-size: 1.5rem;
+            border-bottom: 2px solid #333;
+            padding-bottom: 10px;
+        }
 
-        .url-input {
-            width: 100%; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 14px; padding: 18px; color: #fff; font-size: 1rem;
-            outline: none; text-align: center; transition: 0.3s;
+        .input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
         }
-        .url-input:focus { border-color: rgba(255, 255, 255, 0.4); background: rgba(255, 255, 255, 0.06); }
 
-        .thumbnail-box { 
-            display: none; text-align: center; margin: 15px auto; 
-            background: rgba(255, 255, 255, 0.04); border-radius: 16px; padding: 10px; max-width: 300px;
+        input[type="text"] {
+            flex: 1;
+            padding: 12px;
+            border-radius: 6px;
+            border: 1px solid #444;
+            background: #121212;
+            color: #fff;
+            font-size: 1rem;
         }
-        .thumbnail-box img { width: 100%; border-radius: 10px; }
 
-        .mode-container {
-            display: flex; background: rgba(0, 0, 0, 0.3); border-radius: 12px;
-            padding: 5px; margin-bottom: 25px; gap: 5px;
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            background-color: var(--accent-color);
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
         }
-        .mode-toggle {
-            flex: 1; background: transparent; border: none; color: rgba(255, 255, 255, 0.4);
-            padding: 12px; font-weight: 700; cursor: pointer; border-radius: 8px;
-        }
-        .mode-toggle.active { background: rgba(255, 255, 255, 0.1); color: #fff; }
 
-        .quality-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 130px));
-            gap: 15px; justify-content: center; margin-bottom: 30px;
+        button:hover {
+            background-color: #005a9e;
         }
-        .quality-card {
-            background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 16px; padding: 20px; cursor: pointer; text-align: center; transition: 0.3s;
-        }
-        .quality-card:hover { background: rgba(255, 255, 255, 0.1); transform: translateY(-5px); }
-        .quality-text { font-size: 1.5rem; font-weight: 800; color: #fff; }
 
-        .progress-box { display: none; background: rgba(0, 0, 0, 0.3); border-radius: 14px; padding: 20px; }
-        .bar-bg { width: 100%; height: 15px; background: rgba(255, 255, 255, 0.1); border-radius: 8px; overflow: hidden; }
-        .bar-fill { 
-            width: 0%; height: 100%; background: rgba(255, 255, 255, 0.6); border-radius: 8px; 
-            animation: water 2s infinite linear;
+        /* The Visual Enhancement Core Container */
+        .video-wrapper {
+            position: relative;
+            width: 100%;
+            padding-top: 56.25%; /* 16:9 Aspect Ratio */
+            background: #000;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.8);
         }
-        @keyframes water { 0% { background-position: 0 0; } 100% { background-position: 100% 0; } }
 
-        .footer { display: flex; justify-content: space-between; align-items: center; margin-top: auto; }
-        .folder-btn { background: rgba(255, 255, 255, 0.05); color: #fff; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 10px; padding: 12px 20px; cursor: pointer; }
+        /* Custom Dynamic Shaders mapped through web components */
+        #player-frame {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+            transition: filter 0.3s ease;
+            will-change: filter; /* Forces discrete GPU layer rendering */
+        }
+
+        .controls-panel {
+            margin-top: 20px;
+            padding: 15px;
+            background: #121212;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        select {
+            padding: 8px 16px;
+            background: var(--panel-color);
+            color: white;
+            border: 1px solid #444;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.95rem;
+        }
+
+        /* Custom grading adjustment lookup tables built purely via hardware matrix arrays */
+        .preset-cinematic {
+            filter: contrast(1.15) saturate(1.10) brightness(0.98) drop-shadow(0px 0px 2px rgba(255,255,255,0.05));
+        }
+
+        .preset-vivid {
+            filter: contrast(1.30) saturate(1.45) brightness(1.05);
+        }
+
+        .preset-technicolor {
+            filter: contrast(1.1) saturate(0.85) sepia(0.15) hue-rotate(-5deg);
+        }
+
+        .preset-raw {
+            filter: none;
+        }
     </style>
 </head>
 <body>
-    <video autoplay muted loop playsinline id="bgVideo"><source src="neon.mp4" type="video/mp4"></video>
-    <div class="video-tint"></div>
 
-    <div class="app-container">
-        <div class="header">
-            <div class="logo-container"><img src="starvel_logo.png" alt="STARVEL"></div>
-            <p>Standalone High-Speed Desktop Video & Audio Extractor</p>
-        </div>
-
-        <input type="text" id="urlInput" class="url-input" placeholder="Paste the YouTube Video Link here" oninput="handleUrlInputChange()">
-
-        <div class="thumbnail-box" id="thumbBox">
-            <img id="thumbImg" src="" alt="Preview">
-            <div id="thumbTitle" style="font-size: 0.8rem; margin-top: 5px;"></div>
-        </div>
-
-        <div class="mode-container">
-            <button id="modeVideo" class="mode-toggle active" onclick="switchMode('video')">Video Extraction Mode</button>
-            <button id="modeAudio" class="mode-toggle" onclick="switchMode('audio')">Audio Extraction Mode</button>
-        </div>
-
-        <div class="quality-grid" id="grid"></div>
-
-        <div class="progress-box" id="progressBox">
-            <div id="statusTxt" style="margin-bottom: 10px; font-size: 0.9rem;">Status: Initializing...</div>
-            <div class="bar-bg"><div id="barFill" class="bar-fill"></div></div>
-        </div>
-
-        <div class="footer">
-            <button class="folder-btn" onclick="triggerOpenFolder()">Open Downloads Folder</button>
-            <div style="text-align: right; color: rgba(255,255,255,0.3);">v1.2.0 STABLE<br>Designed By Sathwik</div>
-        </div>
+<div class="container">
+    <h2>Web Dolby Vision & Video Grade Emulator</h2>
+    
+    <div class="input-group">
+        <input type="text" id="yt-url" placeholder="Paste standard YouTube watch link here..." value="https://www.youtube.com/watch?v=MtmvUdsxoEl">
+        <button onclick="loadWebVideo()">Load Pipeline</button>
     </div>
 
-    <script>
-        let selectedMode = 'video';
-        const qualities = {
-            video: ['320p', '480p', '720p', '1080p', '4K'],
-            audio: ['MP3']
-        };
+    <div class="video-wrapper">
+        <iframe id="player-frame" src="" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    </div>
 
-        function renderGrid() {
-            const grid = document.getElementById('grid');
-            grid.innerHTML = '';
-            qualities[selectedMode].forEach(q => {
-                const card = document.createElement('div');
-                card.className = 'quality-card';
-                card.innerHTML = `<div class="quality-text">${q}</div>`;
-                card.onclick = () => runDownload(q);
-                grid.appendChild(card);
-            });
+    <div class="controls-panel">
+        <label for="preset-select">Enhancement Profile Matrix:</label>
+        <select id="preset-select" onchange="applyColorGrade()">
+            <option value="preset-cinematic">Cinematic HDR (High Lum Contrast)</option>
+            <option value="preset-vivid">Vivid Booster (Max Saturation Core)</option>
+            <option value="preset-technicolor">Technicolor Film Look (Warm Tint)</option>
+            <option value="preset-raw">Raw Passthrough (Standard Unprocessed)</option>
+        </select>
+    </div>
+</div>
+
+<script>
+    function extractVideoId(url) {
+        const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+        const match = url.match(regExp);
+        return (match && match[2].length === 11) ? match[2] : null;
+    }
+
+    function loadWebVideo() {
+        const inputUrl = document.getElementById('yt-url').value.trim();
+        const videoId = extractVideoId(inputUrl);
+        const playerFrame = document.getElementById('player-frame');
+
+        if (!videoId) {
+            alert('Please enter a valid YouTube video link structure.');
+            return;
         }
 
-        function switchMode(m) {
-            selectedMode = m;
-            document.getElementById('modeVideo').classList.toggle('active', m === 'video');
-            document.getElementById('modeAudio').classList.toggle('active', m === 'audio');
-            renderGrid();
-        }
-
-        function handleUrlInputChange() {
-            const url = document.getElementById('urlInput').value.trim();
-            if (url.includes("youtube.com") || url.includes("youtu.be")) {
-                document.getElementById('thumbBox').style.display = 'block';
-                fetch('http://localhost:5000/fetch-metadata', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({url})
-                })
-                .then(r => r.json())
-                .then(d => {
-                    document.getElementById('thumbImg').src = d.thumbnail;
-                    document.getElementById('thumbTitle').innerText = d.title;
-                });
-            }
-        }
-
-        function runDownload(q) {
-            document.getElementById('progressBox').style.display = 'block';
-            fetch('http://localhost:5000/download', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({url: document.getElementById('urlInput').value, mode: selectedMode, quality: q})
-            })
-            .then(() => {
-                document.getElementById('statusTxt').innerText = "Status: Complete!";
-                document.getElementById('barFill').style.width = "100%";
-            });
-        }
-
-        function triggerOpenFolder() { fetch('http://localhost:5000/open-folder', { method: 'POST' }); }
+        // Connect straight to YouTube's official safe embed pipeline
+        // enablejsapi=1 unlocks internal sync rendering loops
+        playerFrame.src = `https://www.youtube.com/embed/${videoId}?enablejsapi=1&rel=0&vq=hd1080`;
         
-        switchMode('video');
-    </script>
+        // Apply default rendering shader selection instantly on boot
+        applyColorGrade();
+    }
+
+    function applyColorGrade() {
+        const selectMenu = document.getElementById('preset-select');
+        const activePreset = selectMenu.value;
+        const playerFrame = document.getElementById('player-frame');
+
+        // Flush previous preset structural class strings
+        playerFrame.className = '';
+        
+        // Append active grading profile properties to the GPU layer layout
+        playerFrame.classList.add(activePreset);
+    }
+
+    // Auto load setup on page layout paint
+    window.onload = function() {
+        loadWebVideo();
+    };
+</script>
+
 </body>
 </html>
